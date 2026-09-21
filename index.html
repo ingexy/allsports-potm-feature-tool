@@ -1,15 +1,11 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Allsports POTM Feature Tool</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -24,13 +20,12 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
             padding: 30px;
         }
 
         h1 {
             text-align: center;
-            color: #333;
             margin-bottom: 30px;
             font-size: 2.5rem;
             background: linear-gradient(45deg, #667eea, #764ba2);
@@ -58,7 +53,7 @@
             color: #555;
         }
 
-        input, select {
+        input, select, textarea {
             width: 100%;
             padding: 12px;
             border: 2px solid #e1e5e9;
@@ -66,12 +61,19 @@
             font-size: 16px;
             transition: all 0.3s ease;
             background: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        input:focus, select:focus {
+        input:focus, select:focus, textarea:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+            line-height: 1.5;
         }
 
         .script-section {
@@ -85,7 +87,7 @@
 
         .script-section:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .script-header {
@@ -98,7 +100,6 @@
         .script-title {
             font-size: 1.2rem;
             font-weight: bold;
-            color: #333;
             background: linear-gradient(45deg, #667eea, #764ba2);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -115,17 +116,15 @@
             font-size: 14px;
             font-weight: 600;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 15px rgba(102,126,234,0.3);
         }
 
         .copy-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 6px 20px rgba(102,126,234,0.4);
         }
 
-        .copy-btn:active {
-            transform: translateY(0);
-        }
+        .copy-btn:active { transform: translateY(0); }
 
         .script-content {
             background: white;
@@ -139,6 +138,17 @@
             min-height: 100px;
         }
 
+        /* Personal comment input area inside section */
+        .personal-comment-wrap {
+            margin-top: 12px;
+        }
+
+        .personal-comment-wrap label {
+            font-size: 0.9rem;
+            color: #667eea;
+            margin-bottom: 6px;
+        }
+
         .notification {
             position: fixed;
             top: 20px;
@@ -147,121 +157,100 @@
             color: white;
             padding: 12px 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
             transform: translateX(100%);
             transition: transform 0.3s ease;
             z-index: 1000;
         }
 
-        .notification.show {
-            transform: translateX(0);
-        }
-
-        .membership-badge {
-            display: inline-block;
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            margin-left: 10px;
-        }
-
-        .artist { background: #ff6b6b; color: white; }
-        .member { background: #4ecdc4; color: white; }
-        .vip { background: #45b7d1; color: white; }
-        .vip-gold { background: #f39c12; color: white; }
-        .platinum { background: #95a5a6; color: white; }
-        .elite { background: #9b59b6; color: white; }
-        .hall-of-fame { background: #e74c3c; color: white; }
-        .diamond { background: #2c3e50; color: white; }
+        .notification.show { transform: translateX(0); }
 
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-                margin: 10px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .controls {
-                flex-direction: column;
-            }
+            .container { padding: 20px; margin: 10px; }
+            h1 { font-size: 2rem; }
+            .controls { flex-direction: column; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🏆 Allsports POTM Feature Tool 🏆</h1>
-        
-        <div class="controls">
-            <div class="control-group">
-                <label for="memberName">Naam:</label>
-                <input type="text" id="memberName" placeholder="Voer naam in..." value="">
-            </div>
-            <div class="control-group">
-                <label for="membershipStatus">Membership Status:</label>
-                <select id="membershipStatus">
-                    <option value="Artist">Artist</option>
-                    <option value="Member">Member</option>
-                    <option value="Vip Member">Vip Member</option>
-                    <option value="Vip Gold Member">Vip Gold Member</option>
-                    <option value="Platinum Member">Platinum Member</option>
-                    <option value="Elite Member">Elite Member</option>
-                    <option value="Hall of Fame Member">Hall of Fame Member</option>
-                    <option value="Diamond Member">Diamond Member</option>
-                </select>
-            </div>
-        </div>
+<div class="container">
+    <h1>🏆 Allsports POTM Feature Tool 🏆</h1>
 
-        <!-- 1. ALLSPORTS FEATURE SCRIPT -->
-        <div class="script-section">
-            <div class="script-header">
-                <div class="script-title">ALLSPORTS FEATURE SCRIPT</div>
-                <button class="copy-btn" onclick="copyScript('allsports-feature')">Kopieer</button>
-            </div>
-            <div class="script-content" id="allsports-feature"></div>
+    <!-- Top controls: Name + Membership -->
+    <div class="controls">
+        <div class="control-group">
+            <label for="memberName">Name:</label>
+            <input type="text" id="memberName" placeholder="Enter name..." value="">
         </div>
-
-        <!-- 2. FEATURE COMMENT -->
-        <div class="script-section">
-            <div class="script-header">
-                <div class="script-title">FEATURE COMMENT</div>
-                <button class="copy-btn" onclick="copyScript('feature-comment')">Kopieer</button>
-            </div>
-            <div class="script-content" id="feature-comment"></div>
+        <div class="control-group">
+            <label for="membershipStatus">Membership Status:</label>
+            <select id="membershipStatus">
+                <option value="Artist">Artist</option>
+                <option value="Member">Member</option>
+                <option value="Vip Member">Vip Member</option>
+                <option value="Vip Gold Member">Vip Gold Member</option>
+                <option value="Platinum Member">Platinum Member</option>
+                <option value="Elite Member">Elite Member</option>
+                <option value="Hall of Fame Member">Hall of Fame Member</option>
+                <option value="Diamond Member">Diamond Member</option>
+            </select>
         </div>
-
-        <!-- 3. ORIGINAL PHOTO COMMENT (was: SPECIAL FEATURE COMMENT) -->
-        <div class="script-section">
-            <div class="script-header">
-                <div class="script-title">ORIGINAL PHOTO COMMENT</div>
-                <button class="copy-btn" onclick="copyScript('special-feature-comment')">Kopieer</button>
-            </div>
-            <div class="script-content" id="special-feature-comment"></div>
-        </div>
-
-        <!-- 4. EXTRA COMMENT — last -->
-        <div class="script-section">
-            <div class="script-header">
-                <div class="script-title">EXTRA COMMENT</div>
-                <button class="copy-btn" onclick="copyScript('extra-comment')">Kopieer</button>
-            </div>
-            <div class="script-content" id="extra-comment"></div>
-        </div>
-
     </div>
 
-    <div id="notification" class="notification">
-        Tekst gekopieerd naar klembord!
+    <!-- 1. ALLSPORTS FEATURE SCRIPT -->
+    <div class="script-section">
+        <div class="script-header">
+            <div class="script-title">ALLSPORTS FEATURE SCRIPT</div>
+            <button class="copy-btn" onclick="copyScript('allsports-feature')">Copy</button>
+        </div>
+        <div class="script-content" id="allsports-feature"></div>
     </div>
 
-    <script>
-        const scripts = {
-            'allsports-feature': `#snap_allsports_specialfeature
+    <!-- 2. FEATURE COMMENT -->
+    <div class="script-section">
+        <div class="script-header">
+            <div class="script-title">FEATURE COMMENT</div>
+            <button class="copy-btn" onclick="copyFeatureComment()">Copy</button>
+        </div>
+        <div class="script-content" id="feature-comment"></div>
+        <!-- Personal comment input -->
+        <div class="personal-comment-wrap">
+            <label for="personalComment">Personal Comment (will appear in the copied text):</label>
+            <textarea id="personalComment" placeholder="Type your personal comment here..."></textarea>
+        </div>
+    </div>
+
+    <!-- 3. ORIGINAL PHOTO COMMENT -->
+    <div class="script-section">
+        <div class="script-header">
+            <div class="script-title">ORIGINAL PHOTO COMMENT</div>
+            <button class="copy-btn" onclick="copyScript('original-photo-comment')">Copy</button>
+        </div>
+        <div class="script-content" id="original-photo-comment"></div>
+    </div>
+
+</div>
+
+<div id="notification" class="notification">
+    Text copied to clipboard!
+</div>
+
+<script>
+    function getFeatureCommentText() {
+        const name = document.getElementById('memberName').value || 'name';
+        const personal = document.getElementById('personalComment').value.trim();
+        return `✨✨ CONGRATULATIONS @${name} ✨✨\n✨✨    On Being our Photo of the Month Winner.   ✨✨\n\n${personal}`;
+    }
+
+    function updateScripts() {
+        const name = document.getElementById('memberName').value || 'name';
+        const membershipStatus = document.getElementById('membershipStatus').value;
+
+        // ALLSPORTS FEATURE SCRIPT
+        document.getElementById('allsports-feature').textContent =
+`#snap_allsports_specialfeature
 .
-Featured Snap {membershipStatus}: @{name}
+Featured Snap ${membershipStatus}: @${name}
 ✨ C O N G R A T U L A T I O N S ✨
 __________________________________
 .
@@ -281,64 +270,54 @@ For your membership questions and level validations
 #snap_community #snap_allsports #vero #verofriends #photoofthemonth
 .
 #snap_allsports_photoofthemonth
-#snap_allsports_{name}
-#snap_featured_{name}
+#snap_allsports_${name}
+#snap_featured_${name}
 .
-.`,
+.`;
 
-            'feature-comment': `@{name} Congratulations! 🎉 Brilliant Work! Your photography has been highlighted as Photo of the Month on Snap Allsports ❤️ Keep tagging your wonderful pictures with #snap_allsports 💫`,
+        // FEATURE COMMENT — live preview (personal comment is appended)
+        document.getElementById('feature-comment').textContent = getFeatureCommentText();
 
-            'extra-comment': `@{name} Congratulations! 💫
-This feature is worth 1 point towards your membership!
-Brilliant Work!`,
+        // ORIGINAL PHOTO COMMENT
+        document.getElementById('original-photo-comment').textContent =
+`✨✨ CONGRATULATIONS @${name} ✨✨
+✨✨    On Being our Photo of the Month Winner`;
+    }
 
-            'special-feature-comment': `@{name} Congratulations! 💫
-Congratulations on your special feature " Photo of the Month" ! 🎉
-Brilliant Work!`
-        };
+    function copyScript(id) {
+        const text = document.getElementById(id).textContent;
+        copyToClipboard(text);
+    }
 
-        function updateScripts() {
-            const name = document.getElementById('memberName').value || 'name';
-            const membershipStatus = document.getElementById('membershipStatus').value;
+    function copyFeatureComment() {
+        copyToClipboard(getFeatureCommentText());
+    }
 
-            Object.keys(scripts).forEach(scriptKey => {
-                const element = document.getElementById(scriptKey);
-                let content = scripts[scriptKey];
-                content = content.replace(/{name}/g, name);
-                content = content.replace(/{membershipStatus}/g, membershipStatus);
-                element.textContent = content;
-            });
-        }
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showNotification();
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+            showNotification();
+        });
+    }
 
-        function copyScript(scriptId) {
-            const element = document.getElementById(scriptId);
-            const text = element.textContent;
-            
-            navigator.clipboard.writeText(text).then(() => {
-                showNotification();
-            }).catch(() => {
-                const textArea = document.createElement('textarea');
-                textArea.value = text;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                showNotification();
-            });
-        }
+    function showNotification() {
+        const n = document.getElementById('notification');
+        n.classList.add('show');
+        setTimeout(() => n.classList.remove('show'), 3000);
+    }
 
-        function showNotification() {
-            const notification = document.getElementById('notification');
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+    document.getElementById('memberName').addEventListener('input', updateScripts);
+    document.getElementById('membershipStatus').addEventListener('change', updateScripts);
+    document.getElementById('personalComment').addEventListener('input', updateScripts);
 
-        document.getElementById('memberName').addEventListener('input', updateScripts);
-        document.getElementById('membershipStatus').addEventListener('change', updateScripts);
-
-        updateScripts();
-    </script>
+    updateScripts();
+</script>
 </body>
 </html>
